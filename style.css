@@ -18,13 +18,22 @@ body{
 
 header{
     /* border: 2px solid red; */
-    padding: 1rem;
+    padding: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: var(--secondary-color);
     position: sticky;
 }
+
+.titleContainer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* border: 1px solid red; */
+    width: 20vw;
+}
+
 
 #title{
     font-family: 'Ubuntu', sans-serif;
@@ -118,4 +127,16 @@ h3{
 
 .movie:hover .overview{
     transform: translateY(0%);
+}
+
+
+#footer{
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--secondary-color);
+    font-weight: bolder;
+    font-family: 'Ubuntu', sans-serif;
+    letter-spacing: 0.5px;
 }
