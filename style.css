@@ -5,8 +5,10 @@
 
 
 :root{
-    --primary-color : #22254b;
-    --secondary-color: #373b69;
+    /* --primary-color : #22254b; */
+    /* --secondary-color: #373b69; */
+    --primary-color : #1D5C63;
+    --secondary-color: #417D7A;
 }
 body{
     font-family: 'Poppins', 'sans-serif';
@@ -26,7 +28,7 @@ header{
 #title{
     font-family: 'Ubuntu', sans-serif;
     box-shadow: 0.25px 0.5px rgba(0, 0, 0, 0.1);
-    color: #141414;
+    color: #1B1A17;
 }
 
 .search{
@@ -44,7 +46,7 @@ header{
     background-color: var(--primary-color);
 }
 .search::placeholder{
-    color: #7378c5;
+    color: #1A3C40;
 }
 
 #main{
@@ -104,7 +106,8 @@ h3{
     left: 0px;
     right: 0px;
     bottom: 0px;
-    background-color: #fff;
+    /* background-color: #fff; */
+    background-color: #9FC088;
     padding: 1rem;
     max-height: 100%;
     transform: translateY(101%);
