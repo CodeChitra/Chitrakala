@@ -23,6 +23,7 @@ header{
     align-items: center;
     justify-content: space-between;
     background-color: var(--secondary-color);
+    position: sticky;
 }
 
 #title{
