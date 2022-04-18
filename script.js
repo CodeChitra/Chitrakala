@@ -11,6 +11,7 @@ const main = document.getElementById('main');
 
 const form = document.getElementById('form')
 const search = document.getElementById('search');
+const title = document.getElementById('title');
 getMovies(API_URL)
 function getMovies(url) {
     fetch(url).then(res => res.json()).then(data => {
@@ -63,4 +64,8 @@ form.addEventListener('submit', (e) => {
     else {
         getMovies(API_URL);
     }
+})
+
+title.addEventListener('click', () => {
+    getMovies(API_URL);
 })
