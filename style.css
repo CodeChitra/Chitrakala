@@ -65,6 +65,29 @@ header{
     color: #1A3C40;
 }
 
+#tags{
+    /* border: 2px solid black; */
+    width: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 10px auto;
+}
+
+.tag{
+    background-color: #FF5F00;
+    padding: 0.8vw 1vw;
+    border-radius: 50px;
+    margin: 5px;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.highlight{
+    background-color: #9FC088;
+}
+
 #main{
     display: flex;
     justify-content: center;
