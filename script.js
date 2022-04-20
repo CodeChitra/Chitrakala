@@ -197,6 +197,7 @@ function clearBtn() {
             selectedGenre = [];
             highlightColor();
             setGenre();
+            getMovies(API_URL)
         })
         tagsElem.append(clear);
     }
