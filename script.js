@@ -14,11 +14,21 @@ const IMAGE_URl = 'https://image.tmdb.org/t/p/w500';
 const SEARCH_URL = BASE_URL + '/search/movie?' + API_KEY
 
 // Targetting some DOM Element
+
+//Main in which movies are showing
 const main = document.getElementById('main');
+
+//Search Bar Form
 const form = document.getElementById('form')
 const search = document.getElementById('search');
+
+//Title of the website
 const title = document.getElementById('title');
+
+//Container in which all category tags are showing
 const tagsElem = document.getElementById('tags');
+
+//Geners takesn from the TMDB API and stored as a array of objects
 const generes = [
     {
         "id": 28,
@@ -97,11 +107,32 @@ const generes = [
         "name": "Western"
     }
 ]
+
+//Previous Page button
+const prev = document.getElementById('prev')
+
+//Next Page Button
+const next = document.getElementById('next')
+
+//Current Page Button
+const current = document.getElementById('current')
+
+//Pagination required Variables
+var currentPage = 1;
+var nextPage = 2;
+var prevPage = 3;
+var totalPages = 100;
+var lastUrl = ""
+
+//Array variables that is storing and removing the id's of categories according to selected or deselected
 var selectedGenre = []
+
+//Setting the genre by this funtion
 setGenre()
 function setGenre() {
     tagsElem.innerHTML = "";
     generes.forEach((genre) => {
+        //Creating a new category tag element
         const gElem = document.createElement('div');
         gElem.classList.add('tag');
         gElem.id = genre.id;
@@ -120,9 +151,14 @@ function setGenre() {
                     selectedGenre.push(genre.id);
                 }
             }
+
+            //Here we are getMovies funtion passing the url where we are adding genere query parameteres at the end of the API_URL
             getMovies(API_URL + "&with_genres=" + encodeURI(selectedGenre.join(",")))
+
+            //This funtion highlights the selected catogeries
             highlightColor();
         })
+        //Now appending each element in tagsElem container ---- category tags container
         tagsElem.append(gElem)
     })
 }
@@ -146,7 +182,7 @@ function highlightColor() {
 }
 
 
-//Cear Category Button 
+//Clear Category Button 
 function clearBtn() {
     const getClear = document.getElementById('clear')
     if (getClear) {
@@ -170,9 +206,35 @@ function clearBtn() {
 //!Here we have created a function which is fetching the json data using fetch api and after it calling the showData funtion
 getMovies(API_URL)
 function getMovies(url) {
+    lastUrl = url
     fetch(url).then(res => res.json()).then(data => {
         // console.log(data.results)
-        showMovies(data.results);
+        if (data.results != 0) {
+            currentPage = data.page;
+            nextPage = currentPage + 1;
+            prevPage = currentPage - 1;
+            totalPages = data.total_pages;
+
+            current.innerText = currentPage;
+            if (currentPage <= 1) {
+                prev.classList.add('disabled')
+                next.classList.remove('disabled')
+            }
+            else if (currentPage > 1) {
+                // next.classList.add('disabled')
+                prev.classList.remove('disabled')
+            }
+            else {
+                next.classList.add('disabled')
+                prev.classList.add('disabled')
+            }
+            //Every time the page is reloaded by default the page automaticalyy the page would be scrolled to the category tags
+            tagsElem.scrollIntoView({ behavior: "smooth" })
+            showMovies(data.results);
+        }
+        else {
+            main.innerHTML = "<h1>No results found!</h1>"
+        }
     })
 }
 
@@ -231,3 +293,49 @@ form.addEventListener('submit', (e) => {
 title.addEventListener('click', () => {
     getMovies(API_URL);
 })
+
+
+//Previous page button where we are calling a funtion pageCall and passing the prevPage value if previous page available
+prev.addEventListener('click', () => {
+    if (prevPage > 0) {
+        pageCall(prevPage)
+    }
+})
+
+//Next page button where we are calling a funtion pageCall and passing the prevPage value if next page available
+next.addEventListener('click', () => {
+    if (nextPage < totalPages) {
+        pageCall(nextPage)
+        console.log("Clicked on next")
+    }
+})
+
+
+function pageCall(page) {
+
+    // Here we are splitting our current active url by ?, it will be splitted into array of length two
+    let urlSplit = lastUrl.split("?");
+    //Now againg splitting the secind element of urlSplit by &, length is now fixed but we want to get the last element 
+    let queryParams = urlSplit[1].split("&");
+
+    //Here we are splitting the last element of queryParams by =, so that we get to know whether page paramter is aaded at the last of url or not
+    let key = queryParams[queryParams.length - 1].split("=")
+
+    //Here we are checking whether page paramter is added or not 
+    if (key[0] != 'page') {
+        //If page parameter is not added then we simply add it to the last of the url
+        let url = lastUrl + "&page=" + page;
+        getMovies(url);
+    }
+    else {
+        //If page paramter is added now we have to change the page paramter value to change the page 
+        key[1] = page.toString();
+
+        //Niw combining the page parameter and value
+        let a = key.join("=");
+
+        //And adding it to the last of the url using &
+        let url = lastUrl + "&" + a;
+        getMovies(url);
+    }
+}
