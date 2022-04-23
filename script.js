@@ -209,7 +209,7 @@ getMovies(API_URL)
 function getMovies(url) {
     lastUrl = url
     fetch(url).then(res => res.json()).then(data => {
-        // console.log(data.results)
+        console.log(data.results)
         if (data.results != 0) {
             currentPage = data.page;
             nextPage = currentPage + 1;
@@ -243,7 +243,7 @@ function getMovies(url) {
 function showMovies(data) {
     main.innerHTML = ""
     data.forEach(movie => {
-        const { title, poster_path, vote_average, overview } = movie
+        const { title, poster_path, vote_average, overview, id } = movie
         const movieEl = document.createElement('div');
         movieEl.classList.add('movie');
         movieEl.innerHTML = `
@@ -258,11 +258,58 @@ function showMovies(data) {
             <div class="overview">
                 <h3>Overview</h3>
                 ${overview}
+                <br>
+                <button id="${id}" class="know-more">Know More</button>
             </div>
     
         `
-        main.appendChild(movieEl)
+
+        main.appendChild(movieEl);
+        document.getElementById(id).addEventListener('click', () => {
+            console.log(id);
+            openNav(movie);
+        })
     });
+}
+const overlayContent = document.getElementById("overlayContent")
+function openNav(movie) {
+    let id = movie.id;
+    fetch(BASE_URL + '/movie/' + id + '/videos?' + API_KEY).then(res => res.json()).then(videoData => {
+        console.log(videoData);
+        if (videoData) {
+            document.getElementById("myNav").style.width = "100%";
+            if (videoData.results.length > 0) {
+                var embed = [];
+                videoData.results.forEach(video => {
+                    let { name, key, site } = video;
+                    if (site == 'YouTube') {
+                        if (name.includes("Trailer")) {
+                            embed.push(`
+                        
+                        <iframe width="560" height="315" src="https://www.youtube.com/embed/${key}" title="${name}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="responsive-iframe"></iframe>
+                        `
+                            )
+                        }
+                        else {
+                            overlayContent.innerHTML = `<h1 class ="no-result">No Trailer Found</h1>`;
+                        }
+
+                    }
+                })
+
+                overlayContent.innerHTML = embed.join("");
+            }
+            else {
+                overlayContent.innerHTML = `<h1 class ="no-result">No Result Found</h1>`;
+            }
+        }
+    })
+
+}
+
+/* Close when someone clicks on the "x" symbol inside the overlay */
+function closeNav() {
+    document.getElementById("myNav").style.width = "0%";
 }
 
 //Color according to movierating

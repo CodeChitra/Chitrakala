@@ -2,4 +2,8 @@
     #version{
         margin-left: 1vw;
     }
+    .responsive-iframe{
+        width: 70vw;
+        height: 50vw;
+    }
   }
